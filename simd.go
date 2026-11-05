@@ -397,7 +397,7 @@ func myersCalcEditDistanceGlobalSIMD(kernel columnKernel, peq []word, W int, max
 		// Adjust number of blocks according to Ukkonen
 		// Adjust last block
 		// If block is not beneath band, calculate next block. Only next because others are certainly beneath band.
-		if lastBlock+1 < maxNumBlocks && !((lastBlock+1)*wordSize-1 > k-blocks.Score[lastBlock]+2*wordSize-2-len(target)+c+queryLength) {
+		if lastBlock+1 < maxNumBlocks && (lastBlock+1)*wordSize-1 <= k-blocks.Score[lastBlock]+2*wordSize-2-len(target)+c+queryLength {
 			lastBlock++
 
 			var newHout int

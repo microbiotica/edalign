@@ -172,7 +172,6 @@ func myersCalcEditDistanceSemiGlobal(peq []word, W int, maxNumBlocks int, queryL
 		if mode == ModeInfix && lastBlock == -1 {
 			lastBlock++
 			bl++
-			peq_c++
 		}
 
 		// reduce band by increasing first block if possible, Not applicable to HW.
@@ -240,8 +239,6 @@ func myersCalcEditDistanceSemiGlobal(peq []word, W int, maxNumBlocks int, queryL
 	if bestScore != -1 {
 		result.EndLocations = positions
 	}
-
-	return
 }
 
 func myersCalcEditDistanceGlobal(peq []word, W int, maxNumBlocks int, queryLength int, target Sequence, k int, findAlignment bool, targetStopPosition int) (alignment *alignmentData, bestScore, position int) {
@@ -325,9 +322,9 @@ func myersCalcEditDistanceGlobal(peq []word, W int, maxNumBlocks int, queryLengt
 		// Adjust number of blocks according to Ukkonen
 		// Adjust last block
 		// If block is not beneath band, calculate next block. Only next because others are certainly beneath band.
-		if lastBlock+1 < maxNumBlocks && !(
-		//score[lastBlock] >= k + WORD_SIZE ||  // NOTICE: this condition could be satisfied if above block also!
-		(lastBlock+1)*wordSize-1 > k-blocks[bl].Score+2*wordSize-2-len(target)+c+queryLength) {
+		if lastBlock+1 < maxNumBlocks &&
+			//score[lastBlock] >= k + WORD_SIZE ||  // NOTICE: this condition could be satisfied if above block also!
+			(lastBlock+1)*wordSize-1 <= k-blocks[bl].Score+2*wordSize-2-len(target)+c+queryLength {
 
 			lastBlock++
 			bl++
@@ -340,7 +337,6 @@ func myersCalcEditDistanceGlobal(peq []word, W int, maxNumBlocks int, queryLengt
 			var newHout int
 			block.P, block.M, newHout = calculateBlock(block.P, block.M, peq_c[lastBlock], hout)
 			block.Score = blocks[bl-1].Score - hout + wordSize + newHout
-			hout = newHout
 
 			blocks[bl] = block
 		}
@@ -984,8 +980,8 @@ func AlignPEQ(query, target Sequence, peq Peq, config *Config) (*Result, error) 
 		}
 
 		// Find starting locations
-		switch {
-		case config.Task&TaskLocation == TaskLocation:
+		switch TaskLocation {
+		case config.Task & TaskLocation:
 			result.StartLocations = make([]int, len(result.EndLocations))
 
 			switch config.Mode {

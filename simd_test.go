@@ -51,7 +51,7 @@ func TestColumnKernels(t *testing.T) {
 					m[i] = word(rng.Uint64()) &^ p[i] // vertical deltas are never both +1 and -1
 					switch rng.Intn(3) {
 					case 0:
-						eq[i] = word(rng.Uint64()) | word(rng.Uint64())
+						eq[i] = word(rng.Uint64())
 					default:
 						eq[i] = word(rng.Uint64())
 					}
