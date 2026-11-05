@@ -1,0 +1,13 @@
+name: Pull Request
+
+on:
+  pull_request:
+
+jobs:
+  go-lint:
+    uses: microbiotica/github/.github/workflows/go-lint.yml@main
+    secrets: inherit
+
+  go-test:
+    uses: microbiotica/github/.github/workflows/go-test.yml@main
+    secrets: inherit
